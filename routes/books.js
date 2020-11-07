@@ -10,13 +10,24 @@ const Author = require('../models/author')
 
 const uploadPath = path.join('public', Book.coverImageBasePath)
 const imageMimeTypes = ['images/jpeg', 'images/png','images/gif']
-
-const upload = multer({
-    dest: uploadPath,
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadPath)
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    },
     fileFilter: (req, file, callback) => {
         callback(null,imageMimeTypes.includes(file.mimetype))
     }
 })
+
+//var upload = multer({ storage: storage }).single('myImage');
+
+const upload = multer({
+    storage: storage
+})
+
 //Search all Books
 router.get('/', async (req, res) => {
     //res.send('All Books')
@@ -61,10 +72,9 @@ router.get('/new', async (req,res) => {
 })
 
 //Create Book
-router.post('/', upload.single('cover'), async (req,res) => {
+router.post('/', upload.single('cover1'), async (req,res) => {
     //res.send('Create Book')
-    //const fileName = req.file != null ? req.file.filename : null
-    console.log("Filename: ",req.file.filename)
+    let fileName = req.file != null ? req.file.filename : null
     const book = new Book({
         title: req.body.title,
         author: req.body.author,

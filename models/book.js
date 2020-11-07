@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const path = require('path')
-//const author = require('./author')
 
 const coverImageBasePath = 'uploads/bookCovers' //once declared this has to exported for global use in project
 
@@ -36,10 +35,11 @@ const bookSchema = new mongoose.Schema({
     }
 }) 
 
-bookSchema.virtual('coverImageBasePath').get(function(){
+bookSchema.virtual('coverImagePath').get(function() {
     if( this.coverImageName != null){
         return path.join('/', coverImageBasePath, this.coverImageName)
     }
 })
+
 module.exports = mongoose.model('Book', bookSchema)
 module.exports.coverImageBasePath = coverImageBasePath
