@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const multer = require('multer')
-const path = require('path')
-const fs = require('fs')
+//const multer = require('multer')
+//const path = require('path')
+//const fs = require('fs') // to unlink i.e., delete file from uploads
 
 const Book = require('../models/book')
 const Author = require('../models/author')
 //const { error } = require('console')
 
-const uploadPath = path.join('public', Book.coverImageBasePath)
-const imageMimeTypes = ['images/jpeg', 'images/png','images/gif']
+//const uploadPath = path.join('public', Book.coverImageBasePath)
+const imageMimeTypes = ['image/jpeg', 'image/png','image/gif']
+/*
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, uploadPath)
@@ -22,11 +23,11 @@ const storage = multer.diskStorage({
     }
 })
 
-//var upload = multer({ storage: storage }).single('myImage');
-
 const upload = multer({
     storage: storage
 })
+
+*/
 
 //Search all Books
 router.get('/', async (req, res) => {
@@ -72,17 +73,19 @@ router.get('/new', async (req,res) => {
 })
 
 //Create Book
-router.post('/', upload.single('cover1'), async (req,res) => {
-    //res.send('Create Book')
-    let fileName = req.file != null ? req.file.filename : null
+router.post('/',  async (req,res) => {
+    //res.send('Create Book')   upload.single('cover1'),
+    //let fileName = req.file != null ? req.file.filename : null
     const book = new Book({
         title: req.body.title,
         author: req.body.author,
         publishDate: new Date(req.body.publishDate),
         pageCount: req.body.pageCount,
-        coverImageName: fileName,
+        //coverImageName: fileName,
         description: req.body.description
     })
+    saveCover(book,req.body.cover1)
+
     //once multer is implemented with upload and capturing filename now save to db
     try{ 
         const newBook = await book.save()
@@ -91,13 +94,29 @@ router.post('/', upload.single('cover1'), async (req,res) => {
     }
     catch(err){
         console.error(err)
+        /*
         if( book.coverImageName != null){
             removeBookCover(book.coverImageName)
         }
+        */
         renderNewPage(res, book, true)
     }
 
 })
+
+function saveCover(book,coverEncoded){
+    if(coverEncoded == null) return
+    const cover = JSON.parse(coverEncoded)
+    //console.log("Cover Type: ",cover.type)
+    //console.log("Type Condition Check: ", imageMimeTypes.includes(cover.type))
+    if(cover != null && imageMimeTypes.includes(cover.type)){
+       // console.log("inside if block")
+        book.coverImage = new Buffer.from(cover.data, 'base64')
+        book.coverImageType = cover.type
+    }
+    //console.log("Image Buffer: ", book.coverImage)
+    //console.log("Type:", book.coverImageType)
+}
 
 //under route New Book get the logic can be encapsulated into a generic function 
 async function renderNewPage(res, book, hasError = false)
@@ -116,12 +135,12 @@ async function renderNewPage(res, book, hasError = false)
     } 
 }
 
-
+/*
 function removeBookCover(fileName){
     fs.unlink(path.join(uploadPath,fileName), err => {
 		if (err) console.error(err)
 	})
 }
-
+*/
 // this will export for making use from else where in proj
 module.exports = router 

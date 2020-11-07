@@ -25,7 +25,23 @@
     <div class="form-row">
         <div> <!-- class="form-item form-item-no-grow"> -->
         <label>Cover</label>
-        <input type="file" name="cover1" class="filepond">
+        <input type="file" name="cover1" class="filepond"/>
+         <script>
+            FilePond.registerPlugin(
+                FilePondPluginImagePreview,
+                FilePondPluginImageResize,
+                FilePondPluginFileEncode
+            );
+
+            FilePond.setOptions({
+                stylePanelAspectRatio: 150/100,
+                imageResizeTargetWidth: 100,
+                imageResizeTargetHeight: 150
+            });
+
+            FilePond.parse(document.body);
+        </script>
+            
         </div>
         <div class="form-item">
         <label>Description</label>
