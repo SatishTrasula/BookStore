@@ -49,11 +49,11 @@ router.post('/', async(req,res) => {
 router.get('/:id', async (req,res) => {
     //res.send("Show Author "+ req.params.id)
     try{
-        const author = await Author.findById(req.params.id)
-        const books = await Book.find({author: author.id}).limit(6).exec()
-        //console.log(books)
+        const author_t = await Author.findById(req.params.id)
+        const books = await Book.find({author: author_t.id}).limit(6).exec()
+        console.log(books)
         res.render('authors/show',{
-            author: author,
+            author: author_t,
             booksByAuthor: books
         })
     }

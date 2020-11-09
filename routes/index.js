@@ -6,7 +6,7 @@ router.get('/', async (req, res) => {
     //once the pages are done we can call them as below to render data or info
 	let books = []
 	try {
-		books = await Book.find().sort({ createdDt: 'dec' }).limit(10).exec()
+		books = await Book.find().sort({ createdDt: 'desc' }).limit(10).exec()
 	}
 	catch {
 		books = []
