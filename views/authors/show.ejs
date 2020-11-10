@@ -1,9 +1,12 @@
 <div class="container">
-<h2><%= author.name %></h2>
-<a class="btn btn-primary" href="/authors/<%= author.id%>/edit" role="button">Edit</a>
-<a class="btn btn-info" href="/authors" role="button">Cancel</a>
-<%- include('../partials/deleteForm', {url: `/authors/${author.id}`}) %>
-
+<h2>Author: <%= author.name %></h2>
+<div class="form-inline container">
+<div class="row">
+<div class="form-group"><a class="btn btn-primary" href="/authors/<%= author.id%>/edit" role="button">Edit</a></div>
+<div class="form-group"><a class="btn btn-info" href="/authors" role="button">Cancel</a></div>
+<div class="form-group"><%- include('../partials/deleteForm', {url: `/authors/${author.id}`}) %></div>
+</div>
+</div>
 <% if (booksByAuthor.length > 0) { %>
     <h2>Books By Author</h2>
     <% booksByAuthor.forEach(book => { %>
