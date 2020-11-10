@@ -1,8 +1,12 @@
+<div class='container'>
 <h2>Recently Added</h2>
-<div>
+<div class='form-group'>
     <% books.forEach(book => { %>
+        <label class="control-label"><%= book.title %></label>
         <a href="/books/<%= book.id%>">
             <img height="150" width="100" src="<%= book.coverImagePath %>">
-        </a>
+        </a>  
     <% }) %>
 </div>
+</div>
+

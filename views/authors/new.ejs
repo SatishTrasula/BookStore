@@ -1,6 +1,10 @@
+<div class="container">
 <h2>New Authors</h2>
-<form action="/authors" method="POST">
+<form class="form-inline" action="/authors" method="POST">
     <%- include('_form_fields') %>
-    <a href="/authors">Cancel</a> <!-- anchor are used to link things and button for interactive form or objects-->
-    <button typr="submit">Create</button>
+    <div class="btn-group" role="group">
+    <a class="btn btn-info" href="/authors" role="button">Cancel</a> <!-- anchor are used to link things and button for interactive form or objects-->
+    <button class="btn btn-primary" typr="submit">Create</button>
+    </div>
 </form>
+</div>
